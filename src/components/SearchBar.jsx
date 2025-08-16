@@ -40,13 +40,13 @@ const SearchBar = ({ onSearch, onMore }) => {
           </button>
         </div>
       </form>
+      
       <button 
         className="more-button"
         onClick={onMore}
         disabled={isSubmitting}
         aria-label="Load more movies"
-      >
-        More Movies
+      > More Movies
       </button>
     </div>
   );

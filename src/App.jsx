@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MovieCard from "./components/MovieCard";
 import Footer from "./components/Footer";
-import { fetchHome, searchMovie } from "./api"; // Import API functions
+import { fetchHome, searchMovie } from "./api";
+import TrailerPage from './components/TrailerPage';
 import "./App.css";
 
 const App = () => {
@@ -17,12 +19,10 @@ const App = () => {
     const loadMovies = async () => {
       try {
         setLoading(true);
-        // Use the API utility function instead of direct axios call
         const response = await fetchHome();
-        
+
         if (response.data && response.data.data && response.data.data.movies) {
           setMovies(response.data.data.movies);
-          // Set the first movie as featured movie
           if (response.data.data.movies.length > 0) {
             setFeaturedMovie(response.data.data.movies[0]);
           }
@@ -48,9 +48,8 @@ const App = () => {
 
     try {
       setSearchLoading(true);
-      setError(null); // Clear any previous errors
+      setError(null);
       
-      // Use the API utility function with the correct parameter name
       const response = await searchMovie(searchQuery.trim());
 
       if (response.data) {
@@ -58,12 +57,9 @@ const App = () => {
         console.log("Search response:", response.data);
         
         if (status === "success" || status === "partial_success") {
-          // Handle the movie search results
           const { searchedMovie, similarMovies } = data;
-          
           setSearchResults({
             movie: searchedMovie,
-            // Check each category of similar movies
             similarMovies: {
               directorMovies: similarMovies?.directorMovies || [],
               actorMovies: similarMovies?.actorMovies || [],
@@ -71,10 +67,7 @@ const App = () => {
             },
             isPartialResult: status === "partial_success"
           });
-          
-          setFeaturedMovie(null); // Clear the featured movie when showing search results
-          
-          // Show a warning if it's a partial success
+          setFeaturedMovie(null);
           if (status === "partial_success") {
             setError(message || "Found the movie, but couldn't get all recommendations");
           }
@@ -103,7 +96,6 @@ const App = () => {
   };
 
   const handleMore = () => {
-    // TODO: Implement load more functionality
     console.log("Loading more movies");
   };
 
@@ -125,109 +117,112 @@ const App = () => {
   }
 
   return (
-    <div className="app">
-      <div className="container">
-        <header className="app-header">
-          <h1>SAME DRAMA's</h1>
-          <p>A movie recommendation platform for you</p>
-        </header>
+    <Router>
+      <Routes>
+        {/* Main home route */}
+        <Route path="/" element={
+          <div className="app">
+            <div className="container">
+              <header className="app-header">
+                <h1>SAME DRAMA's</h1>
+                <p>A movie recommendation platform for you</p>
+              </header>
 
-        <div className="search-section">
-          <div className="search-container">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search for a movie..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-            <button 
-              className="search-button"
-              onClick={handleSearch}
-              disabled={searchLoading}
-            >
-              {searchLoading ? 'Searching...' : 'Search'}
-            </button>
-          </div>
-        </div>
-
-        {error && <div className="error-message">{error}</div>}
-
-        {searchResults && (
-          <div className="search-results-section">
-            <h2>Search Results</h2>
-            
-            <div className="searched-movie">
-              <h3>Your Movie</h3>
-              <MovieCard movie={searchResults.movie} />
-            </div>
-            
-            {/* Display director movie recommendations */}
-            {searchResults.similarMovies.directorMovies.length > 0 && (
-              <div className="recommendation-section">
-                <h3>Movies by the Same Director</h3>
-                <div className="movies-grid">
-                  {searchResults.similarMovies.directorMovies.map((movie, index) => (
-                    <MovieCard key={`director-${index}`} movie={movie} />
-                  ))}
+              <div className="search-section">
+                <div className="search-container">
+                  <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Search for a movie..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                  />
+                  <button 
+                    className="search-button"
+                    onClick={handleSearch}
+                    disabled={searchLoading}
+                  >
+                    {searchLoading ? 'Searching...' : 'Search'}
+                  </button>
                 </div>
               </div>
-            )}
-            
-            {/* Display actor movie recommendations */}
-            {searchResults.similarMovies.actorMovies.length > 0 && (
-              <div className="recommendation-section">
-                <h3>Movies with Similar Cast</h3>
-                <div className="movies-grid">
-                  {searchResults.similarMovies.actorMovies.map((movie, index) => (
-                    <MovieCard key={`actor-${index}`} movie={movie} />
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {/* Display genre movie recommendations */}
-            {searchResults.similarMovies.genreMovies.length > 0 && (
-              <div className="recommendation-section">
-                <h3>Similar Genre Movies</h3>
-                <div className="movies-grid">
-                  {searchResults.similarMovies.genreMovies.map((movie, index) => (
-                    <MovieCard key={`genre-${index}`} movie={movie} />
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
 
-        {!searchResults && (
-          <div className="movies-section">
-            <div className="section-header">
-              <h2>Recommended Movies</h2>
-              <button 
-                className="more-button"
-                onClick={handleMore}
-                disabled={loading}
-              >
-                More Movies
-              </button>
-            </div>
+              {error && <div className="error-message">{error}</div>}
 
-            <div className="movies-grid">
-              {movies.map((movie, index) => (
-                <MovieCard
-                  key={index}
-                  movie={movie}
-                  onClick={() => setFeaturedMovie(movie)}
-                />
-              ))}
+              {searchResults && (
+                <div className="search-results-section">
+                  <h2>Search Results</h2>
+                  
+                  <div className="searched-movie">
+                    <h3>Your Movie</h3>
+                    <MovieCard movie={searchResults.movie} />
+                  </div>
+                  
+                  {searchResults.similarMovies.directorMovies.length > 0 && (
+                    <div className="recommendation-section">
+                      <h3>Movies by the Same Director</h3>
+                      <div className="movies-grid">
+                        {searchResults.similarMovies.directorMovies.map((movie, index) => (
+                          <MovieCard key={`director-${index}`} movie={movie} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {searchResults.similarMovies.actorMovies.length > 0 && (
+                    <div className="recommendation-section">
+                      <h3>Movies with Similar Cast</h3>
+                      <div className="movies-grid">
+                        {searchResults.similarMovies.actorMovies.map((movie, index) => (
+                          <MovieCard key={`actor-${index}`} movie={movie} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {searchResults.similarMovies.genreMovies.length > 0 && (
+                    <div className="recommendation-section">
+                      <h3>Similar Genre Movies</h3>
+                      <div className="movies-grid">
+                        {searchResults.similarMovies.genreMovies.map((movie, index) => (
+                          <MovieCard key={`genre-${index}`} movie={movie} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {!searchResults && (
+                <div className="movies-section">
+                  <div className="section-header">
+                    <h2>Recommended Movies</h2>
+                    <button 
+                      className="more-button"
+                      onClick={handleMore}
+                      disabled={loading}
+                    >
+                      More Movies
+                    </button>
+                  </div>
+
+                  <div className="movies-grid">
+                    {movies.map((movie, index) => (
+                      <MovieCard key={index} movie={movie} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
+            <Footer />
           </div>
-        )}
-      </div>
-      <Footer />
-    </div>
+        } />
+
+        {/* Trailer route */}
+        <Route path="/movie-trailer" element={<TrailerPage />} />
+      </Routes>
+    </Router>
   );
 };
 
