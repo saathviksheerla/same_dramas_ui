@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import './MovieCard.css';
 
 const MovieCard = ({ movie }) => {
+  const API_BASE = process.env.REACT_APP_SERVER_URL;
   const fetchYouTubeVideo = async () => {
     const preferredLanguage = prompt('Enter preferred trailer language (e.g. Hindi, English, Telugu):') || 'Telugu';
 
     try {
-      const response = await fetch('http://localhost:5500/api/get-trailer', {
+      const response = await fetch(`${API_BASE}/get-trailer`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
