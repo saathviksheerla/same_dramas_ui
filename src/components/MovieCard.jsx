@@ -2,22 +2,21 @@ import React, { useState } from 'react';
 import './MovieCard.css';
 
 const MovieCard = ({ movie }) => {
-<<<<<<< Updated upstream
-  const fetchYouTubeVideo = async () => {
-    const preferredLanguage = prompt('Enter preferred trailer language (e.g. Hindi, English, Telugu):') || 'Telugu';
-=======
+
   const API_BASE = process.env.REACT_APP_SERVER_URL;
   const [showLanguages, setShowLanguages] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
->>>>>>> Stashed changes
+
 
   const languages = ['Hindi', 'English', 'Telugu']; // extend if needed
 
   const fetchYouTubeVideo = async (preferredLanguage) => {
-    try {
-      const response = await fetch('http://localhost:5500/api/get-trailer', {
+    try{
+      const response = await fetch(`${API_BASE}/get-trailer`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ title: movie.title, language: preferredLanguage }),
       });
 

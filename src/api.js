@@ -1,8 +1,8 @@
+
 import axios from "axios";
 
 // Update this to match your actual backend URL
 const API_BASE = process.env.REACT_APP_SERVER_URL;
-console.log("API_BASE=" ,API_BASE);
 /**
  * Fetch home page movie recommendations
  * @returns {Promise} Axios response with initial movies
