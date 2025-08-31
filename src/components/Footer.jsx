@@ -13,16 +13,17 @@ const Footer = () => {
           <h3>Quick Links</h3>
           <ul>
             <li><a href="#home">Home</a></li>
-            <li><a href="#search">Search</a></li>
-            <li><a href="#movies">Movies</a></li>
           </ul>
         </div>
         <div className="footer-section">
-          <h3>Connect With Us</h3>
+          <h3>Connect with us </h3>
           <div className="social-links">
-            <a href="#" className="social-link">Twitter</a>
-            <a href="#" className="social-link">Facebook</a>
-            <a href="#" className="social-link">Instagram</a>
+
+      
+            <a href="https://www.linkedin.com/in/saathvik-sheerla/"  className="social-link">Saathvik</a>
+            <p>&</p>
+            <a href="https://www.linkedin.com/in/g-akshay-851a0b25b/" className="social-link">Akshay</a>        
+
           </div>
         </div>
       </div>

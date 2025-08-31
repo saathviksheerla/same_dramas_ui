@@ -6,6 +6,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .movie-card:hover {
@@ -70,6 +71,7 @@
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  
 }
 
 .movie-year, .movie-genre {
@@ -89,6 +91,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  
 }
 
 @media (max-width: 768px) {
@@ -104,4 +107,68 @@
     font-size: 0.85rem;
     -webkit-line-clamp: 2;
   }
-} 
+}
+
+/* You had this placeholder — not used anymore, safe to keep */
+.language-container {
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* rest of your styles */
+}
+
+/* ===================== */
+/*    ADDED STYLES       */
+/* ===================== */
+
+/* So we can absolutely-position the overlay inside info area */
+.movie-info {
+  position: relative;
+}
+
+/* Overlay that appears above the Watch button, inside the same card
+   NOTE: absolute + pointer-events lets it NOT change the card height
+   and NOT affect sibling cards in the grid. */
+.language-overlay {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  bottom: 56px; /* sits just above the Watch Trailer button */
+  width: calc(100% - 2rem); /* stay within card padding */
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 10px 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 2; /* above info, under poster if overlapping */
+}
+
+.language-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.select-language-text {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Flex row for language buttons */
+.language-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
