@@ -16,12 +16,18 @@ const Footer = () => {
           </ul>
         </div>
         <div className="footer-section">
-          <h3>Connect With Us</h3>
+          <h3>Connect with us </h3>
           <div className="social-links">
+<<<<<<< Updated upstream
             <a href="https://www.linkedin.com/in/saathvik-sheerla/" className="social-link">Saathvik</a>
             <p>&</p>
             <a href="https://www.linkedin.com/in/g-akshay-851a0b25b/" className="social-link">Akshay</a>
             
+=======
+            <a href="https://www.linkedin.com/in/saathvik-sheerla/"  className="social-link">Saathvik</a>
+            <p>&</p>
+            <a href="https://www.linkedin.com/in/g-akshay-851a0b25b/" className="social-link">Akshay</a>        
+>>>>>>> Stashed changes
           </div>
         </div>
       </div>

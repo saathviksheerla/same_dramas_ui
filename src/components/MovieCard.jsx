@@ -1,16 +1,23 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './MovieCard.css';
 
 const MovieCard = ({ movie }) => {
+<<<<<<< Updated upstream
   const fetchYouTubeVideo = async () => {
     const preferredLanguage = prompt('Enter preferred trailer language (e.g. Hindi, English, Telugu):') || 'Telugu';
+=======
+  const API_BASE = process.env.REACT_APP_SERVER_URL;
+  const [showLanguages, setShowLanguages] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+>>>>>>> Stashed changes
 
+  const languages = ['Hindi', 'English', 'Telugu']; // extend if needed
+
+  const fetchYouTubeVideo = async (preferredLanguage) => {
     try {
       const response = await fetch('http://localhost:5500/api/get-trailer', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: movie.title, language: preferredLanguage }),
       });
 
@@ -34,13 +41,8 @@ const MovieCard = ({ movie }) => {
                   color: #fff;
                   text-align: center;
                 }
-                h2 {
-                  margin-bottom: 20px;
-                }
-                iframe {
-                  border: none;
-                  max-width: 100%;
-                }
+                h2 { margin-bottom: 20px; }
+                iframe { border: none; max-width: 100%; }
               </style>
             </head>
             <body>
@@ -58,9 +60,10 @@ const MovieCard = ({ movie }) => {
       alert('Failed to fetch trailer.');
     }
   };
-const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div className="movie-card">
+      {/* Poster */}
       <div className="movie-poster">
         {movie.img ? (
           <img src={movie.img} alt={movie.title} />
@@ -71,6 +74,7 @@ const [isHovered, setIsHovered] = useState(false);
         )}
       </div>
 
+      {/* Info */}
       <div className="movie-info">
         <h3 className="movie-title">{movie.title}</h3>
 
@@ -81,21 +85,59 @@ const [isHovered, setIsHovered] = useState(false);
 
         <p className="movie-description">{movie.description}</p>
 
-        <button onClick={fetchYouTubeVideo} onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        background: isHovered ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)',
-        color: '#fff',
-        padding: '12px 24px',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        borderRadius: '8px',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        cursor: 'pointer',
-        transition: 'all 0.3s ease'
-      }}>
-  Watch Trailer
-</button>
+        {/* Watch Trailer Button */}
+        <button
+          onClick={() => setShowLanguages(!showLanguages)}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          style={{
+            background: isHovered ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)',
+            color: '#fff',
+            padding: '12px 24px',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '8px',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          Watch Trailer
+        </button>
+
+        
+        <div className={`language-overlay ${showLanguages ? 'show' : ''}`}>
+          <p className="select-language-text">Select a language:</p>
+
+          <div className="language-buttons">
+            {languages.map((lang) => (
+              <button
+                key={lang}
+                onClick={() => {
+                  fetchYouTubeVideo(lang);
+                  setShowLanguages(false); 
+                }}
+                className="language-btn"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  color: '#fff',
+                  padding: '8px 12px',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(244, 244, 240, 1)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)')}
+              >
+                {lang}
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* ===== End Language Overlay ===== */}
       </div>
     </div>
   );
