@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MovieCard from "./components/MovieCard";
 import Footer from "./components/Footer";
-import { fetchHome, searchMovie } from "./api";
+import { fetchHome, searchMovie, fetchMoreMovies } from "./api";
 import TrailerPage from './components/TrailerPage';
 import "./App.css";
 
@@ -54,7 +54,6 @@ const App = () => {
 
       if (response.data) {
         const { status, data, message } = response.data;
-        console.log("Search response:", response.data);
         
         if (status === "success" || status === "partial_success") {
           const { searchedMovie, similarMovies } = data;
@@ -96,7 +95,8 @@ const App = () => {
   };
 
   const handleMore = () => {
-    console.log("Loading more movies");
+    // Placeholder for loading more movies functionality
+    
   };
 
   if (loading) {

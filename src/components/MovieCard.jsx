@@ -1,28 +1,22 @@
 import React, { useState } from 'react';
 import './MovieCard.css';
+import { fetchTrailer } from '../api';
 
 const MovieCard = ({ movie }) => {
 
-  const API_BASE = process.env.REACT_APP_SERVER_URL;
   const [showLanguages, setShowLanguages] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
 
   const languages = ['Hindi', 'English', 'Telugu']; // extend if needed
 
-  const fetchYouTubeVideo = async (preferredLanguage) => {
+  const fetchYouTubeVideo = async (language) => {
     try{
-      const response = await fetch(`${API_BASE}/get-trailer`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title: movie.title, language: preferredLanguage }),
-      });
+      const response = await fetchTrailer(language, movie.title);
 
-      const data = await response.json();
+      const data = response.data;
 
-      if (response.ok && data.url) {
+      if (response.status === 200 && data.url) {
         const embedUrl = data.url.replace('watch?v=', 'embed/') + '?controls=1&rel=0';
 
         // Open trailer in new tab

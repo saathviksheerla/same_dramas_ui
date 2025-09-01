@@ -7,13 +7,13 @@ const API_BASE = process.env.REACT_APP_SERVER_URL;
  * Fetch home page movie recommendations
  * @returns {Promise} Axios response with initial movies
  */
-export const fetchHome = () => axios.get(`${API_BASE}/home`);
+export const fetchHome = () => axios.get(`${API_BASE}`);
 
 /**
  * Fetch more movies
  * @returns {Promise} Axios response with additional movies
  */
-export const fetchMoreMovies = () => axios.post(`${API_BASE}/moremovies`);
+export const fetchMoreMovies = () => axios.post(`${API_BASE}/movies/more`);
 
 /**
  * Search for a movie and get recommendations
@@ -21,4 +21,7 @@ export const fetchMoreMovies = () => axios.post(`${API_BASE}/moremovies`);
  * @returns {Promise} Axios response with search results and recommendations
  */
 export const searchMovie = (moviename) =>
-  axios.post(`${API_BASE}/movie`, { moviename });
+  axios.post(`${API_BASE}/movies`, { moviename });
+
+export const fetchTrailer = async (language, title) =>
+  axios.post(`${API_BASE}/trailers`, { language, title });
