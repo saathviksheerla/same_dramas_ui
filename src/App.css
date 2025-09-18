@@ -39,15 +39,15 @@ body {
 }
 
 .search-section {
-  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;  /* centers whole group horizontally */
+  margin: 20px 0;
 }
 
 .search-container {
-  max-width: 600px;
-  margin: 0 auto;
   display: flex;
-  gap: 1rem;
-  align-items: center;
+  justify-content: center;   /* centers input group inside */
+  width: 100%;
 }
 
 .search-input {
@@ -64,7 +64,7 @@ body {
 .search-input:focus {
   outline: none;
   background-color: #2a2a2a;
-  box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.3);
+  
 }
 
 .search-button {
@@ -290,6 +290,7 @@ body {
 /* SearchBar Styles */
 .search-results {
   padding: 0 1rem;
+
 }
 
 .search-results h2,
@@ -402,7 +403,7 @@ body {
 
 input:focus {
   outline: none;
-  border-color: #007bff !important;
+  border-color:none #9ba7b3 !important;
 }
 
 button:hover {
@@ -484,4 +485,86 @@ main {
 .searched-movie-section .movie-card {
   max-width: 300px;
   margin: 0 auto;
+}
+
+.search-input-group {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  max-width: 600px; /* spacing between input, mic, and search button */
+}
+
+/* Input takes full width */
+.search-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 2px solid #d3cfcf;
+  border-radius: 30px;
+  background-color: #111;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+}
+.search-input:focus
+{
+  border: 2px solid rgb(227, 151, 75);
+}
+
+
+/* Mic button inline (not absolute) */
+.mic-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.mic-button:focus {
+  outline: none;
+}
+
+.mic-button:active {
+  transform: scale(0.95); /* subtle click feedback */
+}
+
+/* Bigger mic icon */
+.mic-icon {
+  width: 60px;
+  height: 60px;
+  transition: all 0.2s ease;
+}
+
+/* Listening glow */
+.mic-button.listening .mic-icon {
+  filter: drop-shadow(0 0 6px rgb(190, 180, 180));
+}
+
+/* Search button same height as input */
+.search-button {
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: none;
+  
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  height: 44px; /* match input */
+  transition: background-color 0.2s ease;
+}
+
+.search-button:disabled {
+  
+  cursor: not-allowed;
+}
+
+.search-button:hover:not(:disabled) {
+  background-color: #0cc;
 }
