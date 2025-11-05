@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MovieCard from "./components/MovieCard";
 import Footer from "./components/Footer";
-import { fetchHome, searchMovie, fetchMoreMovies } from "./api";
+import SearchBar from "./components/SearchBar"; // <-- import the updated SearchBar
+import { fetchHome, searchMovie } from "./api";
+import {   fetchMoreMovies } from "./api";
 import TrailerPage from './components/TrailerPage';
 import "./App.css";
 
@@ -10,7 +12,6 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
   const [featuredMovie, setFeaturedMovie] = useState(null);
   const [searchResults, setSearchResults] = useState(null);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -40,8 +41,9 @@ const App = () => {
     loadMovies();
   }, []);
 
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) {
+  // Search handler for SearchBar component
+  const handleSearch = async (query) => {
+    if (!query.trim()) {
       setError("Please enter a movie name to search");
       return;
     }
@@ -49,12 +51,13 @@ const App = () => {
     try {
       setSearchLoading(true);
       setError(null);
-      
-      const response = await searchMovie(searchQuery.trim());
+
+      const response = await searchMovie(query.trim());
 
       if (response.data) {
         const { status, data, message } = response.data;
-        
+        console.log("Search response:", response.data);
+
         if (status === "success" || status === "partial_success") {
           const { searchedMovie, similarMovies } = data;
           setSearchResults({
@@ -88,15 +91,8 @@ const App = () => {
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
   const handleMore = () => {
-    // Placeholder for loading more movies functionality
-    
+    console.log("Loading more movies");
   };
 
   if (loading) {
@@ -119,7 +115,6 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Main home route */}
         <Route path="/" element={
           <div className="app">
             <div className="container">
@@ -128,24 +123,9 @@ const App = () => {
                 <p>A movie recommendation platform for you</p>
               </header>
 
+              {/* ✅ Use the SearchBar component with mic support */}
               <div className="search-section">
-                <div className="search-container">
-                  <input
-                    type="text"
-                    className="search-input"
-                    placeholder="Search for a movie..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                  />
-                  <button 
-                    className="search-button"
-                    onClick={handleSearch}
-                    disabled={searchLoading}
-                  >
-                    {searchLoading ? 'Searching...' : 'Search'}
-                  </button>
-                </div>
+                <SearchBar onSearch={handleSearch} onMore={handleMore} />
               </div>
 
               {error && <div className="error-message">{error}</div>}
@@ -153,12 +133,11 @@ const App = () => {
               {searchResults && (
                 <div className="search-results-section">
                   <h2>Search Results</h2>
-                  
                   <div className="searched-movie">
                     <h3>Your Movie</h3>
                     <MovieCard movie={searchResults.movie} />
                   </div>
-                  
+
                   {searchResults.similarMovies.directorMovies.length > 0 && (
                     <div className="recommendation-section">
                       <h3>Movies by the Same Director</h3>
@@ -169,7 +148,7 @@ const App = () => {
                       </div>
                     </div>
                   )}
-                  
+
                   {searchResults.similarMovies.actorMovies.length > 0 && (
                     <div className="recommendation-section">
                       <h3>Movies with Similar Cast</h3>
@@ -180,7 +159,7 @@ const App = () => {
                       </div>
                     </div>
                   )}
-                  
+
                   {searchResults.similarMovies.genreMovies.length > 0 && (
                     <div className="recommendation-section">
                       <h3>Similar Genre Movies</h3>
@@ -219,7 +198,6 @@ const App = () => {
           </div>
         } />
 
-        {/* Trailer route */}
         <Route path="/movie-trailer" element={<TrailerPage />} />
       </Routes>
     </Router>
